@@ -26,6 +26,7 @@ import android.app.Activity
 import android.graphics.Color
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
+import androidx.core.view.forEach
 import com.cryart.sabbathschool.core.extensions.activity.setLightStatusBar
 import com.cryart.sabbathschool.core.extensions.view.tint
 import com.cryart.sabbathschool.core.model.SSReadingDisplayOptions
@@ -72,13 +73,12 @@ class AppbarOffsetChangeListener(
             activity.setLightStatusBar(false)
         }
 
-        toolbar.navigationIcon?.tint(color)
-        toolbar.overflowIcon?.tint(color)
-
-        val size = toolbar.menu.size()
-        for (i in 0 until size) {
-            val item = toolbar.menu.getItem(i)
-            item.icon?.tint(color)
+        with(toolbar) {
+            navigationIcon?.tint(color)
+            overflowIcon?.tint(color)
+            menu.forEach { item ->
+                item.icon?.tint(color)
+            }
         }
     }
 }

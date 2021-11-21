@@ -26,7 +26,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
@@ -47,8 +46,6 @@ import app.ss.media.playback.ui.nowPlaying.showNowPlaying
 import app.ss.media.playback.ui.video.showVideoList
 import app.ss.pdf.PdfReader
 import coil.load
-import com.cryart.design.theme
-import com.cryart.sabbathschool.core.extensions.context.colorPrimary
 import com.cryart.sabbathschool.core.extensions.context.shareContent
 import com.cryart.sabbathschool.core.extensions.context.toWebUri
 import com.cryart.sabbathschool.core.extensions.coroutines.flow.collectIn
@@ -142,7 +139,6 @@ class SSReadingActivity : SlidingActivity(), SSReadingViewModel.DataListener, Sh
         }
         binding.executePendingBindings()
         binding.viewModel = ssReadingViewModel
-        updateColorScheme()
 
         observeData()
     }
@@ -162,7 +158,7 @@ class SSReadingActivity : SlidingActivity(), SSReadingViewModel.DataListener, Sh
             binding.ssReadingViewPager.currentItem = it
         }
 
-        /*binding.ssReadingAppBar.apply {
+        binding.ssReadingAppBar.apply {
             appbarChangeListener = AppbarOffsetChangeListener(
                 this@SSReadingActivity,
                 ssReadingCollapsingToolbar,
@@ -170,7 +166,7 @@ class SSReadingActivity : SlidingActivity(), SSReadingViewModel.DataListener, Sh
             ).also {
                 ssReadingAppBarLayout.addOnOffsetChangedListener(it)
             }
-        }*/
+        }
 
         MiniPlayerComponent(
             binding.ssPlayerView,
@@ -210,13 +206,6 @@ class SSReadingActivity : SlidingActivity(), SSReadingViewModel.DataListener, Sh
         }.addOnFailureListener {
             Timber.e(it.fillInStackTrace())
         }
-    }
-
-    private fun updateColorScheme() {
-        val primaryColor = this.colorPrimary
-        binding.ssReadingAppBar.ssReadingCollapsingToolbar.setContentScrimColor(primaryColor)
-        binding.ssReadingAppBar.ssReadingCollapsingToolbar.setBackgroundColor(primaryColor)
-        binding.ssProgressBar.ssQuarterliesLoading.theme(primaryColor)
     }
 
     private fun downloadLatestReader(readerArtifactCreationTime: Long) {
@@ -290,15 +279,6 @@ class SSReadingActivity : SlidingActivity(), SSReadingViewModel.DataListener, Sh
         return super.onPrepareOptionsMenu(menu)
     }
 
-    override fun onDestroy() {
-        try {
-            (binding.ssReadingAppBar.ssCollapsingToolbarBackdrop.drawable as? BitmapDrawable)?.bitmap?.recycle()
-        } catch (e: Exception) {
-            Timber.e(e)
-        }
-        super.onDestroy()
-    }
-
     override fun onLessonInfoChanged(ssLessonInfo: SSLessonInfo) {
         binding.ssReadingAppBar.ssCollapsingToolbarBackdrop.load(ssLessonInfo.lesson.cover)
     }
@@ -349,7 +329,7 @@ class SSReadingActivity : SlidingActivity(), SSReadingViewModel.DataListener, Sh
         ssPrefs.displayOptionsFlow().collectIn(this) { displayOptions ->
             readingViewAdapter.readingOptions = displayOptions
             appbarChangeListener?.readingOptions = displayOptions
-            // updateColorScheme(displayOptions)
+            updateColorScheme(displayOptions)
             ssReadingViewModel.onSSReadingDisplayOptions(displayOptions)
         }
 
@@ -378,8 +358,7 @@ class SSReadingActivity : SlidingActivity(), SSReadingViewModel.DataListener, Sh
 
     private fun getReadIndex(): String? {
         val position = binding.ssReadingViewPager.currentItem
-        val read = readingViewAdapter.getReadAt(position)
-        return read?.index
+        return readingViewAdapter.getReadAt(position)?.index
     }
 
     companion object {
