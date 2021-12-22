@@ -36,6 +36,7 @@ val BaseGrey4 = Color(0xFF383838)
 val BaseGrey5 = Color(0xFF1A1A1A)
 val BaseRed = Color(0xFFF1706B)
 val OffWhite = Color(0xFFE2E2E5)
+val SecondaryLighter = Color(0xFFF2F2F2)
 
 data class Colors(
     val Primary: Color = BaseBlue,
