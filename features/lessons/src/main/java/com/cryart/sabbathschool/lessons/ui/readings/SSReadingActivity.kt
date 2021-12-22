@@ -25,15 +25,15 @@ package com.cryart.sabbathschool.lessons.ui.readings
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
-import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
+import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewTreeLifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import app.ss.lessons.data.model.SSLessonInfo
@@ -45,7 +45,6 @@ import app.ss.media.playback.PlaybackViewModel
 import app.ss.media.playback.ui.nowPlaying.showNowPlaying
 import app.ss.media.playback.ui.video.showVideoList
 import app.ss.pdf.PdfReader
-import coil.load
 import com.cryart.sabbathschool.core.extensions.context.shareContent
 import com.cryart.sabbathschool.core.extensions.context.toWebUri
 import com.cryart.sabbathschool.core.extensions.coroutines.flow.collectIn
@@ -54,19 +53,23 @@ import com.cryart.sabbathschool.core.extensions.view.viewBinding
 import com.cryart.sabbathschool.core.misc.DateHelper
 import com.cryart.sabbathschool.core.misc.SSConstants
 import com.cryart.sabbathschool.core.misc.SSUnzip
-import com.cryart.sabbathschool.core.model.SSReadingDisplayOptions
-import com.cryart.sabbathschool.core.model.colorTheme
-import com.cryart.sabbathschool.core.model.displayTheme
 import com.cryart.sabbathschool.core.navigation.AppNavigator
 import com.cryart.sabbathschool.core.ui.ShareableScreen
 import com.cryart.sabbathschool.core.ui.SlidingActivity
 import com.cryart.sabbathschool.lessons.R
 import com.cryart.sabbathschool.lessons.databinding.SsReadingActivityBinding
+import com.cryart.sabbathschool.lessons.ui.readings.components.LessonInfoComponent
+import com.cryart.sabbathschool.lessons.ui.readings.components.LessonInfoModel
 import com.cryart.sabbathschool.lessons.ui.readings.components.MiniPlayerComponent
+import com.cryart.sabbathschool.lessons.ui.readings.components.ToolbarComponent
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageMetadata
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
@@ -94,7 +97,11 @@ class SSReadingActivity : SlidingActivity(), SSReadingViewModel.DataListener, Sh
     private val viewModel by viewModels<ReadingsViewModel>()
     private val playbackViewModel by viewModels<PlaybackViewModel>()
 
-    private var appbarChangeListener: AppbarOffsetChangeListener? = null
+    private val toolbarComponent: ToolbarComponent by lazy {
+        ToolbarComponent(this, binding.ssReadingToolbar)
+    }
+    private val _lessonInfoModel: MutableStateFlow<LessonInfoModel> = MutableStateFlow(LessonInfoModel())
+    private val lessonInfoModelFlow: StateFlow<LessonInfoModel> get() = _lessonInfoModel.asStateFlow()
 
     private var currentReadPosition: Int? = null
 
@@ -144,27 +151,22 @@ class SSReadingActivity : SlidingActivity(), SSReadingViewModel.DataListener, Sh
     }
 
     private fun initUI() {
-        setSupportActionBar(binding.ssReadingAppBar.ssReadingToolbar)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        setSupportActionBar(binding.ssReadingToolbar.ssLessonsToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        with(binding.ssReadingViewPager) {
-            val insetAnimator = KeyboardInsetsChangeAnimator(this)
-            WindowCompat.setDecorFitsSystemWindows(window, false)
-            ViewCompat.setWindowInsetsAnimationCallback(this, insetAnimator)
-            ViewCompat.setOnApplyWindowInsetsListener(this, insetAnimator)
-        }
 
         currentReadPosition?.let {
             binding.ssReadingViewPager.currentItem = it
         }
 
-        binding.ssReadingAppBar.apply {
-            appbarChangeListener = AppbarOffsetChangeListener(
-                this@SSReadingActivity,
-                ssReadingCollapsingToolbar,
-                ssReadingToolbar,
-            ).also {
-                ssReadingAppBarLayout.addOnOffsetChangedListener(it)
+        binding.scrollView.setOnScrollChangeListener { _: NestedScrollView?, _: Int,
+            scrollY: Int, _: Int, _: Int ->
+            val contentHeight = binding.lessonInfoContent.height
+            toolbarComponent.onContentScroll(scrollY, contentHeight, this)
+
+            lifecycleScope.launch {
+                val model = _lessonInfoModel.value
+                _lessonInfoModel.emit(model.copy(scrollY = scrollY))
             }
         }
 
@@ -179,22 +181,12 @@ class SSReadingActivity : SlidingActivity(), SSReadingViewModel.DataListener, Sh
                 )
             }
         )
-    }
 
-    private fun updateColorScheme(displayOptions: SSReadingDisplayOptions) {
-        val color = displayOptions.colorTheme(this)
-        binding.ssReadingAppBar.ssReadingCollapsingToolbar.apply {
-            setContentScrimColor(color)
-            setStatusBarScrimColor(color)
-            setBackgroundColor(color)
-
-            setCollapsedTitleTextColor(
-                when (displayOptions.displayTheme(this@SSReadingActivity)) {
-                    SSReadingDisplayOptions.SS_THEME_DARK -> Color.WHITE
-                    else -> Color.BLACK
-                }
-            )
-        }
+        LessonInfoComponent(
+            binding.lessonInfoContent,
+            lessonInfoModelFlow,
+            ssPrefs.displayOptionsFlow()
+        )
     }
 
     private fun checkIfReaderNeeded() {
@@ -280,13 +272,22 @@ class SSReadingActivity : SlidingActivity(), SSReadingViewModel.DataListener, Sh
     }
 
     override fun onLessonInfoChanged(ssLessonInfo: SSLessonInfo) {
-        binding.ssReadingAppBar.ssCollapsingToolbarBackdrop.load(ssLessonInfo.lesson.cover)
+        lifecycleScope.launch {
+            val model = _lessonInfoModel.value
+            _lessonInfoModel.emit(model.copy(cover = ssLessonInfo.lesson.cover))
+        }
     }
 
     private fun setPageTitleAndSubtitle(title: String, subTitle: String) {
-        binding.ssReadingAppBar.apply {
-            ssReadingCollapsingToolbar.title = title
-            ssCollapsingToolbarSubtitle.text = subTitle
+        toolbarComponent.setTitle(title)
+        lifecycleScope.launch {
+            val model = _lessonInfoModel.value
+            _lessonInfoModel.emit(
+                model.copy(
+                    title = title,
+                    subTitle = subTitle
+                )
+            )
         }
     }
 
@@ -328,22 +329,22 @@ class SSReadingActivity : SlidingActivity(), SSReadingViewModel.DataListener, Sh
     private fun observeData() {
         ssPrefs.displayOptionsFlow().collectIn(this) { displayOptions ->
             readingViewAdapter.readingOptions = displayOptions
-            appbarChangeListener?.readingOptions = displayOptions
-            updateColorScheme(displayOptions)
             ssReadingViewModel.onSSReadingDisplayOptions(displayOptions)
         }
 
+        toolbarComponent.collect(ssPrefs.displayOptionsFlow())
+
         viewModel.audioAvailableFlow.collectIn(this) { available ->
-            val menu = binding.ssReadingAppBar.ssReadingToolbar.menu
+            val menu = binding.ssReadingToolbar.ssLessonsToolbar.menu
             menu.findItem(R.id.ss_reading_menu_audio)?.isVisible = available
         }
         viewModel.videoAvailableFlow.collectIn(this) { available ->
-            val menu = binding.ssReadingAppBar.ssReadingToolbar.menu
+            val menu = binding.ssReadingToolbar.ssLessonsToolbar.menu
             menu.findItem(R.id.ss_reading_menu_video)?.isVisible = available
         }
 
         viewModel.pdfAvailableFlow.collectIn(this) { available ->
-            val menu = binding.ssReadingAppBar.ssReadingToolbar.menu
+            val menu = binding.ssReadingToolbar.ssLessonsToolbar.menu
             menu.findItem(R.id.ss_reading_menu_pdf)?.isVisible = available
         }
     }

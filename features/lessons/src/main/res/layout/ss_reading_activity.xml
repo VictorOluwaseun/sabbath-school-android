@@ -22,7 +22,8 @@
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto">
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -35,19 +36,37 @@
         android:id="@+id/ss_reading_coordinator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
         android:keepScreenOn="true">
 
-        <include
-            android:id="@+id/ss_reading_app_bar"
-            layout="@layout/ss_reading_app_bar"
-            bind:viewModel="@{viewModel}" />
-
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/ss_reading_view_pager"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <androidx.compose.ui.platform.ComposeView
+                    android:id="@+id/lesson_info_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/ss_reading_toolbar_height"
+                    tools:background="?attr/colorPrimary" />
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/ss_reading_view_pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <include
+            android:id="@+id/ss_reading_toolbar"
+            layout="@layout/ss_lessons_toolbar" />
 
         <include
             android:id="@+id/ssContextMenu"
