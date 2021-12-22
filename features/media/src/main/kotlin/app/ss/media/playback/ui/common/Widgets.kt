@@ -28,32 +28,36 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
-import coil.annotation.ExperimentalCoilApi
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import coil.size.Scale
 import coil.size.Size
 import coil.transform.RoundedCornersTransformation
-import com.cryart.design.theme.Spacing8
 import com.google.accompanist.placeholder.PlaceholderDefaults
 import com.google.accompanist.placeholder.material.color
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun CoilImage(
     data: String?,
     modifier: Modifier = Modifier,
     contentDescription: String? = null,
+    color: Color = PlaceholderDefaults.color(),
     cornerRadius: Float = 0f,
+    shape: Shape = RoundedCornerShape(0.dp),
+    elevation: Dp = 0.dp,
     contentScale: ContentScale = ContentScale.Crop,
     scale: Scale = Scale.FIT,
     size: Size? = null
 ) {
     Surface(
         modifier = modifier,
-        color = PlaceholderDefaults.color(),
-        elevation = Spacing8,
-        shape = RoundedCornerShape(Spacing8),
+        color = color,
+        elevation = elevation,
+        shape = shape,
     ) {
         Image(
             painter = rememberImagePainter(

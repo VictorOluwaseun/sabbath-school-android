@@ -25,6 +25,7 @@ package app.ss.media.playback.ui.nowPlaying.components
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -36,6 +37,7 @@ import app.ss.media.playback.ui.common.CoilImage
 import coil.size.PixelSize
 import coil.size.Scale
 import com.cryart.design.theme.Dimens
+import com.cryart.design.theme.Spacing8
 
 private interface Sizes {
     val width: Dp
@@ -89,6 +91,8 @@ internal fun CoverImage(
             .padding(Dimens.grid_1),
         contentDescription = audio.title,
         cornerRadius = CoverCornerRadius,
+        shape = RoundedCornerShape(Spacing8),
+        elevation = Spacing8,
         scale = scale,
         size = size
     )

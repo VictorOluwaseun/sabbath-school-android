@@ -42,6 +42,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -283,7 +284,9 @@ private fun VideoColumn(
                     width = size.width.dp,
                     height = size.height.dp
                 ),
-            cornerRadius = CoverCornerRadius
+            cornerRadius = CoverCornerRadius,
+            shape = RoundedCornerShape(Spacing8),
+            elevation = Spacing8
         )
 
         Spacer(modifier = Modifier.height(Spacing16))
