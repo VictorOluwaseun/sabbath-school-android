@@ -22,12 +22,13 @@
 
 import dependencies.Dependencies
 import dependencies.Dependencies.AndroidX
+import dependencies.Dependencies.Compose
 import dependencies.Dependencies.Firebase
 import dependencies.Dependencies.Kotlin
 import dependencies.Dependencies.Hilt
+import dependencies.Versions
 import extensions.addTestsDependencies
 import extensions.kapt
-import extensions.testImplementation
 
 plugins {
     id(BuildPlugins.Android.LIBRARY)
@@ -58,9 +59,13 @@ android {
         unitTests.isIncludeAndroidResources = true
         unitTests.isReturnDefaultValues = true
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = Versions.COMPOSE
+    }
 
     buildFeatures {
         viewBinding = true
+        compose = true
     }
 }
 
@@ -101,6 +106,9 @@ dependencies {
     implementation(Dependencies.JODA)
     implementation(Dependencies.Coil.core)
     implementation(Dependencies.Facebook.SHIMMER)
+
+    implementation(Compose.ui)
+    implementation(Compose.tooling)
 
     addTestsDependencies()
     testImplementation(project(BuildModules.Libraries.TEST_UTILS))

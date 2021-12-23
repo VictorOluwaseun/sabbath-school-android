@@ -42,14 +42,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import app.ss.media.playback.ui.common.CoilImage
-import app.ss.media.playback.ui.common.rememberFlowWithLifecycle
 import com.cryart.design.theme.LabelSmall
 import com.cryart.design.theme.SSTheme
 import com.cryart.design.theme.SecondaryLighter
 import com.cryart.design.theme.Spacing4
 import com.cryart.design.theme.Title
 import com.cryart.design.theme.parse
+import com.cryart.design.widgets.CoilImage
+import com.cryart.sabbathschool.core.extensions.coroutines.flow.rememberFlowWithLifecycle
 import com.cryart.sabbathschool.core.model.SSReadingDisplayOptions
 import com.cryart.sabbathschool.core.model.themeColor
 import kotlinx.coroutines.flow.Flow

@@ -31,9 +31,9 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import app.ss.media.playback.PlaybackConnection
 import app.ss.media.playback.ui.PlaybackMiniControls
-import app.ss.media.playback.ui.common.rememberFlowWithLifecycle
 import com.cryart.design.theme.SSTheme
 import com.cryart.design.theme.parse
+import com.cryart.sabbathschool.core.extensions.coroutines.flow.rememberFlowWithLifecycle
 import com.cryart.sabbathschool.core.model.SSReadingDisplayOptions
 import com.cryart.sabbathschool.core.model.themeColor
 import kotlinx.coroutines.flow.Flow

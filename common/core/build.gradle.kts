@@ -21,9 +21,11 @@
  */
 import dependencies.Dependencies
 import dependencies.Dependencies.AndroidX
+import dependencies.Dependencies.Compose
 import dependencies.Dependencies.Firebase
 import dependencies.Dependencies.Kotlin
 import dependencies.Dependencies.Hilt
+import dependencies.Versions
 import extensions.addTestsDependencies
 
 plugins {
@@ -49,8 +51,12 @@ android {
         jvmTarget = JavaOptions.version.toString()
         freeCompilerArgs = freeCompilerArgs + KotlinOptions.COROUTINES
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = Versions.COMPOSE
+    }
     buildFeatures {
         viewBinding = true
+        compose = true
     }
 }
 
@@ -72,6 +78,9 @@ dependencies {
     implementation(Firebase.ANALYTICS)
     implementation(Firebase.AUTH)
     implementation(Firebase.DATABASE)
+
+    implementation(Compose.ui)
+    implementation(Compose.tooling)
 
     addTestsDependencies()
     testImplementation(project(BuildModules.Libraries.TEST_UTILS))

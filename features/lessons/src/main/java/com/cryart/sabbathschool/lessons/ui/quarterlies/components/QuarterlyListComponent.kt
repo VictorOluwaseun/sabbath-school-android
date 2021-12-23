@@ -33,10 +33,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import app.ss.lessons.data.model.QuarterlyGroup
 import app.ss.lessons.data.model.SSQuarterly
-import app.ss.media.playback.ui.common.rememberFlowWithLifecycle
 import com.cryart.design.ext.rememberViewInteropNestedScrollConnection
 import com.cryart.design.ext.thenIf
 import com.cryart.design.theme.SSTheme
+import com.cryart.sabbathschool.core.extensions.coroutines.flow.rememberFlowWithLifecycle
 import com.cryart.sabbathschool.lessons.databinding.SsQuarterliesListBinding
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
@@ -77,7 +77,8 @@ fun QuarterlyList(
 
     LazyColumn(modifier = modifier) {
         when (data) {
-            GroupedQuarterlies.Empty -> { /* No op */ }
+            GroupedQuarterlies.Empty -> { /* No op */
+            }
             is GroupedQuarterlies.TypeGroup -> {
                 val groupData = (data as GroupedQuarterlies.TypeGroup).data
                 itemsIndexed(

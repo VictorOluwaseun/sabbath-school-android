@@ -63,8 +63,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import app.ss.media.R
 import app.ss.media.model.SSVideo
 import app.ss.media.model.SSVideosInfo
-import app.ss.media.playback.ui.common.CoilImage
-import app.ss.media.playback.ui.common.rememberFlowWithLifecycle
 import com.cryart.design.ext.thenIf
 import com.cryart.design.theme.BaseBlue
 import com.cryart.design.theme.BaseGrey2
@@ -79,7 +77,9 @@ import com.cryart.design.theme.Title
 import com.cryart.design.theme.TitleSmall
 import com.cryart.design.theme.isLargeScreen
 import com.cryart.design.theme.navTitle
+import com.cryart.design.widgets.CoilImage
 import com.cryart.design.widgets.DragHandle
+import com.cryart.sabbathschool.core.extensions.coroutines.flow.rememberFlowWithLifecycle
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import dev.chrisbanes.snapper.SnapOffsets
 import dev.chrisbanes.snapper.rememberSnapperFlingBehavior

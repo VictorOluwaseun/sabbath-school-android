@@ -33,11 +33,11 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import app.ss.media.playback.model.AudioFile
-import app.ss.media.playback.ui.common.CoilImage
 import coil.size.PixelSize
 import coil.size.Scale
 import com.cryart.design.theme.Dimens
 import com.cryart.design.theme.Spacing8
+import com.cryart.design.widgets.CoilImage
 
 private interface Sizes {
     val width: Dp

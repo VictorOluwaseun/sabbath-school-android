@@ -50,11 +50,11 @@ import app.ss.media.playback.model.PlaybackProgressState
 import app.ss.media.playback.players.SSVideoPlayer
 import app.ss.media.playback.players.VideoPlaybackState
 import app.ss.media.playback.players.isBuffering
-import app.ss.media.playback.ui.common.rememberFlowWithLifecycle
 import app.ss.media.playback.ui.nowPlaying.components.PlayBackControlsDefaults
 import app.ss.media.playback.ui.nowPlaying.components.PlaybackProgressDuration
 import com.cryart.design.theme.SSTheme
 import com.cryart.design.theme.Spacing32
+import com.cryart.sabbathschool.core.extensions.coroutines.flow.rememberFlowWithLifecycle
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable

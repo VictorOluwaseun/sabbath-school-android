@@ -81,7 +81,6 @@ import app.ss.media.playback.extensions.isPlaying
 import app.ss.media.playback.model.AudioFile
 import app.ss.media.playback.model.PlaybackQueue
 import app.ss.media.playback.model.PlaybackSpeed
-import app.ss.media.playback.ui.common.rememberFlowWithLifecycle
 import app.ss.media.playback.ui.nowPlaying.ScreenDefaults.tintColor
 import app.ss.media.playback.ui.nowPlaying.components.BoxState
 import app.ss.media.playback.ui.nowPlaying.components.CoverImage
@@ -98,6 +97,7 @@ import com.cryart.design.theme.Spacing32
 import com.cryart.design.theme.Spacing8
 import com.cryart.design.theme.TitleMedium
 import com.cryart.design.widgets.DragHandle
+import com.cryart.sabbathschool.core.extensions.coroutines.flow.rememberFlowWithLifecycle
 import kotlinx.coroutines.flow.StateFlow
 
 private object ScreenDefaults {

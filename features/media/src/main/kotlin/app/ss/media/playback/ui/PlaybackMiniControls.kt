@@ -68,7 +68,6 @@ import app.ss.media.playback.model.PlaybackProgressState
 import app.ss.media.playback.model.toAudio
 import app.ss.media.playback.ui.common.Dismissible
 import app.ss.media.playback.ui.common.LocalPlaybackConnection
-import app.ss.media.playback.ui.common.rememberFlowWithLifecycle
 import com.cryart.design.ext.thenIf
 import com.cryart.design.theme.BaseGrey1
 import com.cryart.design.theme.BaseGrey2
@@ -79,6 +78,7 @@ import com.cryart.design.theme.Spacing12
 import com.cryart.design.theme.Spacing8
 import com.cryart.design.theme.isLargeScreen
 import com.cryart.design.theme.lighter
+import com.cryart.sabbathschool.core.extensions.coroutines.flow.rememberFlowWithLifecycle
 
 private object PlaybackMiniControlsDefaults {
     val height = 60.dp

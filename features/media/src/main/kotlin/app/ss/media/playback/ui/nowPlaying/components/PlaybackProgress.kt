@@ -51,7 +51,6 @@ import app.ss.media.playback.PlaybackConnection
 import app.ss.media.playback.extensions.isBuffering
 import app.ss.media.playback.extensions.millisToDuration
 import app.ss.media.playback.model.PlaybackProgressState
-import app.ss.media.playback.ui.common.rememberFlowWithLifecycle
 import com.cryart.design.theme.BaseGrey1
 import com.cryart.design.theme.BaseGrey2
 import com.cryart.design.theme.BaseGrey3
@@ -63,6 +62,7 @@ import com.cryart.design.theme.TitleSmall
 import com.cryart.design.theme.darker
 import com.cryart.design.widgets.material.Slider
 import com.cryart.design.widgets.material.SliderDefaults
+import com.cryart.sabbathschool.core.extensions.coroutines.flow.rememberFlowWithLifecycle
 import kotlin.math.roundToLong
 
 private object ProgressColors {

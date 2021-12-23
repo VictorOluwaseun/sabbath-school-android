@@ -21,7 +21,9 @@
  */
 
 import dependencies.Dependencies
+import dependencies.Dependencies.Accompanist
 import dependencies.Dependencies.AndroidX
+import dependencies.Dependencies.Coil
 import dependencies.Dependencies.Compose
 import dependencies.Versions
 
@@ -60,4 +62,8 @@ dependencies {
     implementation(Compose.uiUtil)
     implementation(Compose.material)
     implementation(Compose.tooling)
+
+    implementation(Accompanist.placeholder)
+    implementation(Coil.core)
+    implementation(Coil.compose)
 }

@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  */
 
-package app.ss.media.playback.ui.common
+package com.cryart.design.widgets
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
