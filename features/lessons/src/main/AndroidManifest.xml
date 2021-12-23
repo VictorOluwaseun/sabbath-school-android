@@ -30,7 +30,7 @@
             android:name=".ui.readings.SSReadingActivity"
             android:label="@string/blank"
             android:parentActivityName=".ui.lessons.SSLessonsActivity"
-            android:theme="@style/Theme.SS.Full"
+            android:theme="@style/Theme.SS.Lessons"
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

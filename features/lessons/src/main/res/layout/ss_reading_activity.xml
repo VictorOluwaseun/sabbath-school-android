@@ -42,6 +42,7 @@
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fillViewport="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout
@@ -58,8 +59,7 @@
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/ss_reading_view_pager"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
+                    android:layout_height="match_parent" />
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>

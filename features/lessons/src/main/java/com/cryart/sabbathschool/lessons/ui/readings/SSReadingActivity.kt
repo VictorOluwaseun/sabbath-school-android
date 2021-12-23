@@ -30,6 +30,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewTreeLifecycleOwner
@@ -141,6 +142,8 @@ class SSReadingActivity : SlidingActivity(), SSReadingViewModel.DataListener, Sh
 
                     val ssRead = readingViewAdapter.getReadAt(position) ?: return
                     setPageTitleAndSubtitle(ssRead.title, DateHelper.formatDate(ssRead.date, SSConstants.SS_DATE_FORMAT_OUTPUT_DAY))
+
+                    wrapContentHeight(position)
                 }
             })
         }
@@ -154,6 +157,12 @@ class SSReadingActivity : SlidingActivity(), SSReadingViewModel.DataListener, Sh
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setSupportActionBar(binding.ssReadingToolbar.ssLessonsToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        with(binding.scrollView) {
+            val insetAnimator = KeyboardInsetsChangeAnimator(this)
+            ViewCompat.setWindowInsetsAnimationCallback(this, insetAnimator)
+            ViewCompat.setOnApplyWindowInsetsListener(this, insetAnimator)
+        }
 
         currentReadPosition?.let {
             binding.ssReadingViewPager.currentItem = it
