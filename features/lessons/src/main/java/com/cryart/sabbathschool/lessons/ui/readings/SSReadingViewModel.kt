@@ -49,7 +49,6 @@ import com.cryart.sabbathschool.core.misc.SSConstants
 import com.cryart.sabbathschool.core.misc.SSEvent
 import com.cryart.sabbathschool.core.misc.SSHelper
 import com.cryart.sabbathschool.core.model.SSReadingDisplayOptions
-import com.cryart.sabbathschool.core.model.colorTheme
 import com.cryart.sabbathschool.lessons.BuildConfig
 import com.cryart.sabbathschool.lessons.R
 import com.cryart.sabbathschool.lessons.databinding.SsReadingActivityBinding
@@ -398,11 +397,6 @@ class SSReadingViewModel(
         }
     }
 
-    fun paste() {
-        val ssReadingView = currentSSReadingView
-        ssReadingView?.ssReadViewBridge?.paste()
-    }
-
     fun share() {
         val ssReadingView = currentSSReadingView
         if (ssReadingView != null) {
@@ -419,17 +413,8 @@ class SSReadingViewModel(
     }
 
     fun onSSReadingDisplayOptions(ssReadingDisplayOptions: SSReadingDisplayOptions) {
-        currentSSReadingView?.updateReadingDisplayOptions(ssReadingDisplayOptions)
-        val parent = currentSSReadingView?.parent as? ViewGroup
-        parent?.setBackgroundColor(ssReadingDisplayOptions.colorTheme(parent.context))
-
         for (i in 0 until ssTotalReadsCount) {
-            if (i == ssReadingActivityBinding.ssReadingViewPager.currentItem) continue
-            val view = ssReadingActivityBinding.ssReadingViewPager.findViewWithTag<View?>("ssReadingView_$i")
-            if (view != null) {
-                val readingView = view.findViewById<SSReadingView>(R.id.ss_reading_view)
-                readingView.updateReadingDisplayOptions(ssReadingDisplayOptions)
-            }
+            ssReadingActivityBinding.ssReadingViewPager.updateDisplayOptions(ssReadingDisplayOptions, i)
         }
     }
 

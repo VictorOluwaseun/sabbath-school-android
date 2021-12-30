@@ -27,9 +27,11 @@ import android.widget.LinearLayout
 import androidx.core.view.get
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.cryart.sabbathschool.core.model.SSReadingDisplayOptions
+import com.cryart.sabbathschool.lessons.R
 
 // https://issuetracker.google.com/u/0/issues/143095219
-fun ViewPager2.wrapContentHeight(position: Int) {
+internal fun ViewPager2.wrapContentHeight(position: Int) {
     val view = (get(0) as? RecyclerView)?.layoutManager?.findViewByPosition(position) ?: return
     view.post {
         val wMeasureSpec = View.MeasureSpec.makeMeasureSpec(view.width, View.MeasureSpec.EXACTLY)
@@ -41,4 +43,9 @@ fun ViewPager2.wrapContentHeight(position: Int) {
                 .also { lp -> lp.height = view.measuredHeight }
         }
     }
+}
+
+internal fun ViewPager2.updateDisplayOptions(options: SSReadingDisplayOptions, position: Int) {
+    val view = findViewWithTag<View?>("ssReadingView_$position")
+    view?.findViewById<SSReadingView?>(R.id.ss_reading_view)?.updateReadingDisplayOptions(options)
 }

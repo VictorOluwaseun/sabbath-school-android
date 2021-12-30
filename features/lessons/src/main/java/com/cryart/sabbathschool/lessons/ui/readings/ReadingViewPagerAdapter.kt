@@ -51,18 +51,9 @@ class ReadingViewPagerAdapter(
         holder.itemView.tag = "ssReadingView_$position"
     }
 
-    private fun defaultDisplayOptions(context: Context): SSReadingDisplayOptions {
-        val theme = if (context.isDarkTheme()) {
-            SSReadingDisplayOptions.SS_THEME_DARK
-        } else {
-            SSReadingDisplayOptions.SS_THEME_LIGHT
-        }
-        return SSReadingDisplayOptions(
-            theme,
-            SSReadingDisplayOptions.SS_SIZE_MEDIUM,
-            SSReadingDisplayOptions.SS_FONT_LATO
-        )
-    }
+    private fun defaultDisplayOptions(
+        context: Context
+    ): SSReadingDisplayOptions = SSReadingDisplayOptions(context.isDarkTheme())
 
     override fun getItemCount(): Int = ssReads.size
 }

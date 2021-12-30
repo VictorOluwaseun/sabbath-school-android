@@ -145,6 +145,8 @@ class SSReadingActivity : SlidingActivity(), SSReadingViewModel.DataListener, Sh
                     setPageTitleAndSubtitle(ssRead.title, DateHelper.formatDate(ssRead.date, SSConstants.SS_DATE_FORMAT_OUTPUT_DAY))
 
                     wrapContentHeight(position)
+
+                    readingViewAdapter.readingOptions?.let { updateDisplayOptions(it, position) }
                 }
             })
         }
