@@ -310,14 +310,7 @@ class SSReadingActivity : SlidingActivity(), SSReadingViewModel.DataListener, Sh
         val index = currentReadPosition ?: ssReadIndex
         val observer = object : RecyclerView.AdapterDataObserver() {
             override fun onChanged() {
-                super.onChanged()
                 binding.ssReadingViewPager.currentItem = index
-                ssReads.getOrNull(index)?.let { read ->
-                    setPageTitleAndSubtitle(
-                        read.title,
-                        DateHelper.formatDate(read.date, SSConstants.SS_DATE_FORMAT_OUTPUT_DAY)
-                    )
-                }
             }
         }
         with(readingViewAdapter) {

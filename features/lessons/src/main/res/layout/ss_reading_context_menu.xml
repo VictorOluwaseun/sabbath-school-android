@@ -33,9 +33,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/ss_reading_context_menu"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="wrap_content"

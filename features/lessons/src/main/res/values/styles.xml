@@ -42,6 +42,7 @@
 
     <style name="Theme.SS.Lessons" parent="Theme.SS.Full">
         <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="colorControlActivated">@color/ss_theme_primary</item>
     </style>
 
     <style name="display_options_text_view">

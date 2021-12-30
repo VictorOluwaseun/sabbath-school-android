@@ -22,17 +22,13 @@
 
 package com.cryart.sabbathschool.lessons.ui.readings
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.os.Build
-import android.text.InputType
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.core.widget.NestedScrollView
 import androidx.databinding.BindingAdapter
 import androidx.databinding.ObservableInt
 import androidx.fragment.app.FragmentActivity
@@ -43,9 +39,6 @@ import app.ss.lessons.data.model.SSLessonInfo
 import app.ss.lessons.data.model.SSRead
 import app.ss.lessons.data.model.SSReadComments
 import app.ss.lessons.data.model.SSReadHighlights
-import app.ss.lessons.data.model.SSSuggestion
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.input.input
 import com.cryart.sabbathschool.bible.SSBibleVersesActivity
 import com.cryart.sabbathschool.core.extensions.context.colorPrimary
 import com.cryart.sabbathschool.core.extensions.context.colorPrimaryDark
@@ -188,39 +181,6 @@ class SSReadingViewModel(
             })
     }
 
-    @SuppressLint("CheckResult")
-    fun promptForEditSuggestion() {
-        if (ssReads.isEmpty()) return
-
-        val currentUser = ssFirebaseAuth.currentUser
-        val defaultName = context.getString(R.string.ss_menu_anonymous_name)
-        val defaultEmail = context.getString(R.string.ss_menu_anonymous_email)
-        val name = if (currentUser?.displayName.isNullOrEmpty()) {
-            defaultName
-        } else currentUser?.displayName ?: defaultName
-        val email = if (currentUser?.email.isNullOrEmpty()) {
-            defaultEmail
-        } else currentUser?.email ?: defaultEmail
-
-        MaterialDialog(context).show {
-            title(res = R.string.ss_reading_suggest_edit)
-            input(
-                hintRes = R.string.ss_reading_suggest_edit_hint,
-                inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES,
-                allowEmpty = true
-            ) { _, input ->
-                if (input.isEmpty()) {
-                    return@input
-                }
-                mDatabase.child(SSConstants.SS_FIREBASE_SUGGESTIONS_DATABASE)
-                    .child(userUuid)
-                    .child(ssReads[ssReadingActivityBinding.ssReadingViewPager.currentItem].index)
-                    .setValue(SSSuggestion(name, email, input.toString()))
-                Toast.makeText(context, context.getString(R.string.ss_reading_suggest_edit_done), Toast.LENGTH_LONG).show()
-            }
-        }
-    }
-
     private fun downloadHighlights(dayIndex: String, index: Int) {
         mDatabase.child(SSConstants.SS_FIREBASE_HIGHLIGHTS_DATABASE)
             .child(userUuid)
@@ -311,20 +271,21 @@ class SSReadingViewModel(
 
     @SuppressWarnings("deprecation")
     override fun onSelectionStarted(posX: Float, posY: Float) {
-        val scrollView: NestedScrollView = ssReadingActivityBinding.ssReadingViewPager
-            .findViewWithTag("ssReadingView_" + ssReadingActivityBinding.ssReadingViewPager.currentItem)
+        val scrollView = ssReadingActivityBinding.scrollView
         val y = posY - scrollView.scrollY + ssReadingActivityBinding.ssReadingViewPager.top
 
-        val metrics = DisplayMetrics()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            context.display?.getRealMetrics(metrics)
+        val activity = context as? Activity ?: return
+        val screenWidth = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val windowMetrics = activity.windowManager.currentWindowMetrics
+            windowMetrics.bounds.width()
         } else {
-            (context as? Activity)?.windowManager?.defaultDisplay?.getMetrics(metrics)
+            val metrics = DisplayMetrics()
+            activity.windowManager.defaultDisplay.getMetrics(metrics)
+            metrics.widthPixels
         }
         val params = ssReadingActivityBinding.ssContextMenu.ssReadingContextMenu.layoutParams as ViewGroup.MarginLayoutParams
         val contextMenuWidth = ssReadingActivityBinding.ssContextMenu.ssReadingContextMenu.width
         val contextMenuHeight = ssReadingActivityBinding.ssContextMenu.ssReadingContextMenu.height
-        val screenWidth: Int = metrics.widthPixels
         val margin: Int = SSHelper.convertDpToPixels(context, 50)
         val jumpMargin: Int = SSHelper.convertDpToPixels(context, 60)
         var contextMenuX = posX.toInt() - contextMenuWidth / 2
