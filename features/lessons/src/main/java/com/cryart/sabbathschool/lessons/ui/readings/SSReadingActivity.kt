@@ -54,6 +54,7 @@ import com.cryart.sabbathschool.core.extensions.view.viewBinding
 import com.cryart.sabbathschool.core.misc.DateHelper
 import com.cryart.sabbathschool.core.misc.SSConstants
 import com.cryart.sabbathschool.core.misc.SSUnzip
+import com.cryart.sabbathschool.core.model.colorTheme
 import com.cryart.sabbathschool.core.navigation.AppNavigator
 import com.cryart.sabbathschool.core.ui.ShareableScreen
 import com.cryart.sabbathschool.core.ui.SlidingActivity
@@ -338,6 +339,7 @@ class SSReadingActivity : SlidingActivity(), SSReadingViewModel.DataListener, Sh
     private fun observeData() {
         ssPrefs.displayOptionsFlow().collectIn(this) { displayOptions ->
             readingViewAdapter.readingOptions = displayOptions
+            binding.scrollView.setBackgroundColor(displayOptions.colorTheme(this@SSReadingActivity))
             ssReadingViewModel.onSSReadingDisplayOptions(displayOptions)
         }
 

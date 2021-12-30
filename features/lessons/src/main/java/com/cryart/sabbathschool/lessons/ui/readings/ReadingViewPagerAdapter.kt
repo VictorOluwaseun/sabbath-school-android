@@ -9,12 +9,13 @@ import app.ss.lessons.data.model.SSReadHighlights
 import com.cryart.sabbathschool.core.extensions.context.isDarkTheme
 import com.cryart.sabbathschool.core.extensions.view.inflate
 import com.cryart.sabbathschool.core.model.SSReadingDisplayOptions
-import com.cryart.sabbathschool.core.model.colorTheme
 import com.cryart.sabbathschool.lessons.R
 import com.cryart.sabbathschool.lessons.databinding.SsReadingViewBinding
 
+interface ReadingOptionsCallback : SSReadingView.ContextMenuCallback, SSReadingView.HighlightsCommentsCallback
+
 class ReadingViewPagerAdapter(
-    private val readingViewModel: SSReadingViewModel
+    private val optionsCallback: ReadingOptionsCallback
 ) : RecyclerView.Adapter<ReadingViewHolder>() {
 
     var readingOptions: SSReadingDisplayOptions? = null
@@ -45,7 +46,7 @@ class ReadingViewPagerAdapter(
             ssReadHighlights[position],
             ssReadComments[position],
             readingOptions ?: defaultDisplayOptions(holder.itemView.context),
-            readingViewModel
+            optionsCallback
         )
         holder.itemView.tag = "ssReadingView_$position"
     }
@@ -75,15 +76,11 @@ class ReadingViewHolder(
         highlights: SSReadHighlights,
         comments: SSReadComments,
         readingOptions: SSReadingDisplayOptions,
-        readingViewModel: SSReadingViewModel
+        optionsCallback: ReadingOptionsCallback
     ) {
-
-        val context = binding.root.context
-        binding.ssReadingViewScroll.setBackgroundColor(readingOptions.colorTheme(context))
         binding.ssReadingView.apply {
-            setBackgroundColor(readingOptions.colorTheme(context))
-            setContextMenuCallback(readingViewModel)
-            setHighlightsCommentsCallback(readingViewModel)
+            setContextMenuCallback(optionsCallback)
+            setHighlightsCommentsCallback(optionsCallback)
             setReadHighlights(highlights)
             setReadComments(comments)
             loadContent(read.content, readingOptions)

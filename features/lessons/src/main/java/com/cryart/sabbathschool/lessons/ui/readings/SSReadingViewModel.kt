@@ -82,7 +82,7 @@ class SSReadingViewModel(
     private val dataListener: DataListener,
     private val ssLessonIndex: String,
     private val ssReadingActivityBinding: SsReadingActivityBinding,
-) : SSReadingView.ContextMenuCallback, SSReadingView.HighlightsCommentsCallback {
+) : ReadingOptionsCallback {
     private val ssFirebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private val userUuid = ssFirebaseAuth.currentUser?.uid ?: ""
     private val mDatabase = FirebaseDatabase.getInstance().reference.apply {
