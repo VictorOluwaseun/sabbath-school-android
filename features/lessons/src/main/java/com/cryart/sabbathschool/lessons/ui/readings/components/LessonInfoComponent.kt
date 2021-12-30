@@ -76,7 +76,7 @@ data class LessonInfoModel(
     val cover: String? = null,
     val title: String = "",
     val subTitle: String = "",
-    val scrollY: Int = 0,
+    val scrollY: Int = -1,
 )
 
 @Composable
