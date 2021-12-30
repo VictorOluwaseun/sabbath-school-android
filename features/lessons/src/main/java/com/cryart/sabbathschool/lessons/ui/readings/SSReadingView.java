@@ -131,7 +131,13 @@ public class SSReadingView extends SSWebView {
             lastTouchX = event.getX();
         }
         gestureDetector.onTouchEvent(event);
+        performClick();
         return super.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean performClick() {
+        return super.performClick();
     }
 
     public void setContextMenuCallback(ContextMenuCallback contextMenuCallback) {
